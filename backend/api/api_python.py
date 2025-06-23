@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
+from fastapi import HTTPException 
 from typing import List, Optional
 
 # Inicializa la aplicación FastAPI
@@ -39,14 +40,10 @@ async def read_items():
 # Endpoint para obtener un ítem por ID
 @app.get("/items/{item_id}", response_model=Item)
 async def read_item(item_id: int):
-    """
-    Obtiene un ítem específico por su ID.
-    Retorna 404 si el ítem no se encuentra.
-    """
     for item in fake_db:
         if item["id"] == item_id:
             return item
-    return {"detail": "Item not found"}, 404 # Esto debería ser un HTTPException, pero para simplicidad lo dejo así por ahora
+    raise HTTPException(status_code=404, detail="Item not found")  # ✅ CORRECTO# Esto debería ser un HTTPException, pero para simplicidad lo dejo así por ahora
 
 # Endpoint para crear un nuevo ítem
 @app.post("/items/", response_model=Item)
