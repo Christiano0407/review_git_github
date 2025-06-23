@@ -1,5 +1,5 @@
 from fastapi.testclient import TestClient
-from api.api_python import app  
+from ..api.api_python import app  
 
 client = TestClient(app)
 
@@ -21,7 +21,7 @@ def test_read_item_found():
 
 def test_read_item_not_found():
     response = client.get("/items/999")
-    assert response.status_code == 200  # ⚠️ debería ser 404 pero el código actual retorna 200
+    assert response.status_code == 404  # ⚠️ debería ser 404 pero el código actual retorna 200
     assert response.json()["detail"] == "Item not found"
 
 def test_create_item():
